@@ -1,0 +1,38 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>AI Interview Setup</title>
+</head>
+<body>
+    <h1>🧠 AI RolePlay Interview Simulator</h1>
+    <form method="POST">
+        <label>Choose Role:</label>
+        <select name="role" required>
+            <option value="Android Developer">Android Developer</option>
+            <option value="Data Scientist">Data Scientist</option>
+            <option value="AI Engineer">AI Engineer</option>
+        </select>
+        <br><br>
+
+        <label>Experience Level:</label>
+        <select name="level" required>
+            <option value="Junior">Junior</option>
+            <option value="Mid">Mid</option>
+            <option value="Senior">Senior</option>
+        </select>
+        <br><br>
+
+        <label>Difficulty:</label>
+        <select name="difficulty" required>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Start Interview</button>
+    </form>
+</body>
+</html>

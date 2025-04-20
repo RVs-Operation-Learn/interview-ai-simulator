@@ -1,0 +1,22 @@
+<!-- templates/end.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Interview Complete</title>
+</head>
+<body>
+    <h1>🎉 Interview Finished</h1>
+    <p>You've completed all 3 interview rounds.</p>
+    <h2>📊 Your Average Score: {{ score }} / 10</h2>
+    <h2>Conversation Summary</h2>
+    <ul>
+        {% for message in history %}
+            <li><strong>{{ message.role.capitalize() }}:</strong> {{ message.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{{ url_for('reset') }}">🔄 Start Another Interview</a>
+</body>
+</html>
