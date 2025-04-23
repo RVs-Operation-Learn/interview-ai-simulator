@@ -31,11 +31,17 @@ DIFFICULTY_INSTRUCTIONS = {
 
 # --- Prompt Builder ---
 def build_system_prompt(role, level, difficulty):
-    return f"""{ROLE_TEMPLATES.get(role, '')}
-{LEVEL_TEMPLATES.get(level, '')}
-{DIFFICULTY_INSTRUCTIONS.get(difficulty, '')}
-Your job is to ask technical interview questions one at a time and then evaluate the candidate's answers with a feedback and rate it on a scale of 1 to 10.
-Be concise and professional. After 3 questions, end the interview with a summary.
+    return f"""You are a technical interviewer for a {role} role at {level} level.
+
+🎯 Instructions:
+- Ask **only one** interview question at a time.
+- Do **not ask repeated questions**. Each time question has to be different.
+- After each user answer, provide clear **feedback** and rate the response. Rating should be like 5/10.
+- ✋ Do **not include the next question** in your feedback. 
+- After 3 rounds, provide a brief summary if prompted.
+
+🎯 Difficulty Level: {difficulty}
+Ensure questions and feedback align with this level..
 """
 
 # --- Interview Session Logic ---
@@ -48,12 +54,16 @@ def get_interview_question(conversation_history):
     return response['choices'][0]['message']['content']
 
 def extract_score(feedback_text):
-    match = re.search(r"(\\d+(\\.\\d+)?)\\s*/\\s*10", feedback_text)
-    #match = re.search(r'(\d+(?:\.\d+)?)\s*/\s*10', feedback_text)
+    """
+    Extracts a numeric score from feedback like '... I would rate your answer 8 out of 10.'
+    """
+    match = re.search(r'(\\b\\d{1,2}(\\.\\d+)?)(?=\\s*/\\s*10|\\s*out of\\s*10)', feedback_text, re.IGNORECASE)
+    print(match)
     if match:
-        return float(match.group(1))
-    else:
-        return 0.0
+        score = float(match.group(1))
+        if 0 <= score <= 10:
+            return score
+    return 0.0
 
 def get_feedback_on_answer(conversation_history, user_answer):
     conversation_history.append({"role": "user", "content": user_answer})
